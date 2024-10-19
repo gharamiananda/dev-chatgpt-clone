@@ -1,4 +1,4 @@
-import { IKContext, IKImage, IKUpload } from "imagekitio-react";
+import { IKContext, IKUpload } from "imagekitio-react";
 import { useRef } from "react";
 
 const urlEndpoint = import.meta.env.VITE_IMAGE_KIT_ENDPOINT;
@@ -24,6 +24,8 @@ const authenticator = async () => {
 };
 
 const Upload = ({ setImg }) => {
+
+  console.log('setImg', setImg)
   const ikUploadRef = useRef(null);
   const onError = (err) => {
     console.log("Error", err);

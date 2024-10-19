@@ -2,9 +2,10 @@ import { IKImage } from "imagekitio-react";
 import { useEffect, useRef, useState } from "react";
 import Upload from "../upload/Upload";
 import "./newPrompt.css";
-// import model from "../../lib/gemini";
+// import            from "../../lib/gemini";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import Markdown from "react-markdown";
+import model from "../../lib/gemini";
 
 const NewPrompt = ({ data }) => {
   const [question, setQuestion] = useState("");
@@ -15,6 +16,8 @@ const NewPrompt = ({ data }) => {
     dbData: {},
     aiData: {},
   });
+
+  console.log('data', data)
 
   // const chat = model.startChat({
   //   history: [
@@ -76,18 +79,18 @@ const NewPrompt = ({ data }) => {
     if (!isInitial) setQuestion(text);
 
     try {
-      // const result = await chat.sendMessageStream(
-      //   Object.entries(img.aiData).length ? [img.aiData, text] : [text]
-      // );
+      const result = await model.generateContentStream(
+        text
+      );
       let accumulatedText = "";
-      // for await (const chunk of result.stream) {
-      //   const chunkText = chunk.text();
-      //   console.log(chunkText);
-      //   accumulatedText += chunkText;
-      //   setAnswer(accumulatedText);
-      // }
+      for await (const chunk of result.stream) {
+        const chunkText = chunk.text();
+        console.log(chunkText);
+        accumulatedText += chunkText;
+        setAnswer(accumulatedText);
+      }
 
-      mutation.mutate();
+      // mutation.mutate();
     } catch (err) {
       console.log(err);
     }
